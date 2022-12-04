@@ -1,0 +1,1 @@
+web: python manage.py migrate && gunicorn Nexus_v2.wsgi:application
