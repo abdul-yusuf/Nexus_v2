@@ -11,3 +11,4 @@ django_rest_framework_nested
 drf-nested-routers
 paystackapi
 dj-database-url
+psycopg2
