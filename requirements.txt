@@ -4,6 +4,9 @@ djangorestframework==3.12
 django-allauth
 django-rest-auth==0.9.5
 drf-yasg==1.21.3  
-pillow==9.2
+pillow
 gunicorn==20.0.4
 dj-rest-auth==2.2.5 
+django_rest_framework_nested
+drf-nested-routers
+paystackapi
