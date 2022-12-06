@@ -10,3 +10,4 @@ dj-rest-auth==2.2.5
 django_rest_framework_nested
 drf-nested-routers
 paystackapi
+dj-database-url
