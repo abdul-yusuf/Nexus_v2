@@ -12,3 +12,4 @@ drf-nested-routers
 paystackapi
 dj-database-url
 psycopg2
+whitenoise
