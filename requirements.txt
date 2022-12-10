@@ -6,7 +6,7 @@ django-rest-auth
 drf-yasg==1.21.3  
 pillow
 gunicorn==20.0.4
-dj-rest-auth==2.2.5 
+dj-rest-auth
 django_rest_framework_nested
 drf-nested-routers
 paystackapi
