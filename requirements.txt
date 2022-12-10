@@ -2,7 +2,7 @@ Django==4.1
 django-rest-swagger==2.2.0
 djangorestframework
 django-allauth
-django-rest-auth==0.9.5
+django-rest-auth
 drf-yasg==1.21.3  
 pillow
 gunicorn==20.0.4
