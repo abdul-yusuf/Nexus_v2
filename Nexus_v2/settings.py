@@ -30,10 +30,10 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if env('LIVE')==1:
-    DEBUG = True
-else:
-    DEBUG = False
+# if env('LIVE')==1:
+#     DEBUG = True
+# else:
+DEBUG = False
 
 
 ALLOWED_HOSTS = ['*']
@@ -204,11 +204,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+
 import dj_database_url
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-if not DEBUG:
+if DEBUG:
     DATABASES = {
         "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
     }
