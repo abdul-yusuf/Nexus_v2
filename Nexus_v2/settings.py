@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -38,8 +38,9 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    "whitenoise.runserver_nostatic",
-    
+    # "whitenoise.runserver_nostatic",
+    'django.contrib.sites',
+    #  'account',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -167,6 +168,7 @@ STATIC_URL = '/static/'
 
 
 SITE_ID = 1
+
 AUTH_USER_MODEL = 'authentication.User'
 
 ACCOUNT_EMAIL_REQUIRED = True

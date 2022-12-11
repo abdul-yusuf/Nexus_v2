@@ -45,7 +45,7 @@ urlpatterns = [
     path('auth/', include('dj_rest_auth.urls'), name='auth'),
     path('rest-auth/registration/', include('dj_rest_auth.registration.urls')),
     path('schema/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path(r'^accounts/', include('allauth.urls')),
+    path('accounts/', include('allauth.urls')),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('dj-rest-auth/account-confirm-email/', VerifyEmailView.as_view(), name='account_email_verification_sent')
 ]
