@@ -30,10 +30,10 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# if env('LIVE')==1:
-#     DEBUG = True
-# else:
-DEBUG = True
+if env('LIVE')==1:
+    DEBUG = False
+else:
+    DEBUG = True
 
 
 ALLOWED_HOSTS = ['*']
@@ -211,14 +211,14 @@ import dj_database_url
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# if DEBUG:
-# DATABASES = {
-#     "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
-# }
-# else:
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    DATABASES = {
+        "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
