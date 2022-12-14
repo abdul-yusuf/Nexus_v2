@@ -25,7 +25,7 @@ class ProductAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Vendor)
 # admin.site.register(Images)
-# admin.site.register(Rating)
+admin.site.register(Rating)
 # admin.site.register(Review)
 admin.site.register(Category)
 admin.site.register(Sub_Category)
