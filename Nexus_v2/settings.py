@@ -33,7 +33,7 @@ SECRET_KEY = env('SECRET_KEY')
 # if env('LIVE')==1:
 #     DEBUG = True
 # else:
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = ['*']
@@ -211,14 +211,14 @@ import dj_database_url
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-if DEBUG:
-    DATABASES = {
-        "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
+# if DEBUG:
+# DATABASES = {
+#     "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
+# }
+# else:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+}

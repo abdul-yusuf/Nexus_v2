@@ -68,13 +68,22 @@ class Rating(models.Model):
     rate3 = models.IntegerField(default=1)
     rate4 = models.IntegerField(default=1)
     rate5 = models.IntegerField(default=1)
+
+    def __str__(self) -> str:
+        return self.product.title
     
 class Category(models.Model):
     title = models.CharField(max_length=25)
 
+    def __str__(self) -> str:
+        return self.title
+
 class Sub_Category(models.Model):
     title = models.CharField(max_length=25)
     parent_category = models.ForeignKey('Category', on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self) -> str:
+        return f'{self.parent_category.title}({self.title})'
 
 class Images(models.Model):
     product = models.OneToOneField('Product', on_delete=models.CASCADE, blank=True, null=True, related_name='images')
@@ -84,6 +93,8 @@ class Images(models.Model):
     image4 = models.ImageField(blank=True, null=True)
     image5 = models.ImageField(blank=True, null=True)
 
+    def __str__(self) -> str:
+        return self.product.title
 
 class Coupon(models.Model):
     code = models.CharField(max_length=11)
@@ -119,6 +130,11 @@ class Review(models.Model):
         return super().save(*args, **kwargs)
     # def rating(self):
         
+    def __str__(self) -> str:
+        return self.product.title
 class ReviewReply(models.Model):
     user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, blank=True, null=True)
     massage = models.TextField()
+
+    def __str__(self) -> str:
+        return self.user
