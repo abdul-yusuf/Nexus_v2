@@ -7,7 +7,7 @@ class ImageInline(admin.StackedInline):
 
 class RatingInline(admin.StackedInline):
     model  = Rating
-    readonly_fields = ('rate1','rate2','rate3','rate4','rate5')
+    # readonly_fields = ('rate1','rate2','rate3','rate4','rate5')
 
 class ReviewInline(admin.TabularInline):
     model = Review
