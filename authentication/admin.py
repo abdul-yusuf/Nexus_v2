@@ -23,6 +23,10 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()
+    actions = ['make_vendor']
+
+    def make_vendor(self, request, queryset):
+        queryset.update(is_vendor=True)
     # readonly_fields = 
 
 

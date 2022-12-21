@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if env('LIVE')==1:
+if int(env('LIVE'))==1:
     DEBUG = False
 else:
     DEBUG = True
@@ -143,7 +143,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 REST_AUTH_REGISTER_SERIALIZERS = {
-    # 'REGISTER_SERIALIZER': 'authentication.serializers.UserRegSerializer'
+    'REGISTER_SERIALIZER': 'authentication.serializers.UserRegSerializer'
 }
 
 REST_AUTH_SERIALIZERS = {
@@ -182,7 +182,8 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False
 #Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
+EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST = 'mail.careers-portal.com' 
 EMAIL_HOST= 'smtp.gmail.com'
 EMAIL_USE_TLS = True 
@@ -211,7 +212,7 @@ import dj_database_url
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-if DEBUG:
+if not DEBUG:
     DATABASES = {
         "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
     }

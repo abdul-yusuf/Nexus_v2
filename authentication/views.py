@@ -8,3 +8,6 @@ class UserRegistration(generics.CreateAPIView):
     queryset = User
     serializer_class = UserRegSerializer
 
+    # def perform_create(self, serializer):
+    #     print('creating Verification code')
+            # serializer.save()       

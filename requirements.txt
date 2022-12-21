@@ -13,3 +13,4 @@ paystackapi
 dj-database-url
 psycopg2
 whitenoise
+twilio

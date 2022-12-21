@@ -14,7 +14,12 @@
                 "0.0.0.0:8000"
             ],
             "django": true,
-            "justMyCode": true
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/Nexus_v2/.env",
+            "env": {
+                "SECRET_KEY":"f$sc1e&uuf7fed=wi)2%mo$^skokyhni1*az64s7jjznf!whi$",
+                "LIVE": "0",
+            }
         }
     ]
 }
