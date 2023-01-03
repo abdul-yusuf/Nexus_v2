@@ -11,7 +11,7 @@ class Product(models.Model):
     description = models.CharField(max_length=150)
     category = models.ForeignKey('Category', on_delete=models.CASCADE, blank=True, null=True)
     sub_category = models.ForeignKey('Sub_Category', on_delete=models.CASCADE, blank=True, null=True)
-
+    
     @property
     def rate(self):
         l=[]
@@ -74,13 +74,15 @@ class Rating(models.Model):
     
 class Category(models.Model):
     title = models.CharField(max_length=25)
+    image = models.ImageField()
 
     def __str__(self) -> str:
         return self.title
 
 class Sub_Category(models.Model):
     title = models.CharField(max_length=25)
-    parent_category = models.ForeignKey('Category', on_delete=models.CASCADE, blank=True, null=True)
+    parent_category = models.ForeignKey('Category', on_delete=models.CASCADE, blank=True, null=True, related_name='sub_category')
+    image = models.ImageField()
 
     def __str__(self) -> str:
         return f'{self.parent_category.title}({self.title})'

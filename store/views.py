@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework import generics, viewsets, permissions, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import action, api_view
-from .serializers import ImageSerializer, ProductSerializer, RatingSerializer, ReviewSerializer
-from .models import Images, Product, Rating, Review
+from .serializers import CategorySerializer, ImageSerializer, ProductSerializer, RatingSerializer, ReviewSerializer, Sub_CategorySerializer
+from .models import Category, Images, Product, Rating, Review, Sub_Category
 from django.shortcuts import render, get_object_or_404
 from drf_yasg.utils import swagger_auto_schema 
 from rest_framework import status
@@ -33,6 +33,20 @@ class ProductCRUD(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(vendor=self.request.user.vendor.name)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        if self.request.user.is_authenticated:
+            print('True')
+        else:
+            print('False')
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 class ImagesCRUD(viewsets.ViewSet):
     # queryset = Images.objects.all()
@@ -94,4 +108,48 @@ class ReviewCRUD(viewsets.GenericViewSet, mixins.CreateModelMixin):
         queryset = Review.objects.filter(product=products_pk)
         client = get_object_or_404(queryset, pk=pk)
         serializer = ReviewSerializer(client)
+        return Response(serializer.data)
+
+class CategoriesCRUD(viewsets.GenericViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    
+    def list(self, request, *args, **kwargs):
+        # queryset = Category.objects.all()
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        obj_queryset = self.get_object()
+        print(obj_queryset)
+        queryset = Product.objects.filter(category=obj_queryset)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = ProductSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = ProductSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+class SubCategoriesCRUD(viewsets.GenericViewSet):
+    queryset = Sub_Category.objects.all()
+    serializer_class = Sub_CategorySerializer
+    
+    def list(self, request, *args, **kwargs):
+        # queryset = Category.objects.all()
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)
+    
+    def retrieve(self, request, *args, **kwargs):
+        obj_queryset = self.get_object()
+        print(obj_queryset)
+        queryset = Product.objects.filter(sub_category=obj_queryset)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = ProductSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)

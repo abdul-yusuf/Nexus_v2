@@ -13,7 +13,7 @@ class Order_setSerializer(serializers.ModelSerializer):
     # coupon = CouponSerializer(many=True, read_only=True)
     class Meta:
         model = Order
-        fields = ['id','ref_code','start_date','ordered_date','ordered','payment','coupon','being_delivered','received','refund_requested','refund_granted','option']
+        fields = ['id','ref_code','start_date','ordered_date','payment','coupon','order_place','order_confirmed','ready_for_delivery','being_delivered','delivered','refund_requested','refund_granted','option','address']
         # fields = '__all__'
 
 
@@ -30,13 +30,21 @@ class PaymentSerializer(serializers.ModelSerializer):
         model = Payment
         fields = '__all__'
 
+
+class AddressSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Address
+        fields = '__all__'
+
 class OrderSerializer(serializers.ModelSerializer):
     products = OrderItemSerializer(many=True, read_only=True)
     payment = PaymentSerializer(many=False, read_only=True)
     # coupon = CouponSerializer(many=True, read_only=True)
+    # address = AddressSerializer(many=True, read_only=True)
     class Meta:
         model = Order
-        fields = ['id','ref_code','user','products','start_date','ordered_date','ordered','payment','coupon','being_delivered','received','refund_requested','refund_granted','total']
+        fields = ['id','ref_code','user','products','start_date','ordered_date','payment','coupon','order_place','order_confirmed','ready_for_delivery','being_delivered','delivered','refund_requested','refund_granted','total','address']
         # fields = '__all__'
 
     def create(self, validated_data):
@@ -73,11 +81,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
         return instance
 
-class AddressSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = Address
-        fields = '__all__'
 
 def create_ref_code(k=20):
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=k))

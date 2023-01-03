@@ -30,10 +30,12 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if int(env('LIVE'))==1:
+if env('LIVE')==1:
     DEBUG = False
+    print("DEBUG = False")
 else:
     DEBUG = True
+    print("DEBUG = True")
 
 
 ALLOWED_HOSTS = ['*']
@@ -144,6 +146,7 @@ AUTHENTICATION_BACKENDS = [
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'authentication.serializers.UserRegSerializer'
+    # 'LOGIN_SERIALIZER'
 }
 
 REST_AUTH_SERIALIZERS = {
@@ -212,14 +215,15 @@ import dj_database_url
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-if not DEBUG:
-    DATABASES = {
-        "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
-    }
-else:
+if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
+    }
+    
+else:
+    DATABASES = {
+        "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
     }

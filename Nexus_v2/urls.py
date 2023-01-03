@@ -21,7 +21,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from dj_rest_auth.registration.views import VerifyEmailView
-
+from dj_rest_auth.views import PasswordResetConfirmView
 schema_view = get_schema_view(
    openapi.Info(
       title="NEXUS_SERVICE API",
@@ -37,12 +37,18 @@ schema_view = get_schema_view(
    authentication_classes=()
 )
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # path('dj-auth/', include('django.contrib.auth.urls')),
+
+    path("password-reset/confirm/<uidb64>/<token>/",
+       PasswordResetConfirmView.as_view(),
+       name='password_reset_confirm'),
     path('auth/', include('authentication.urls')),
+    path('auth/', include('dj_rest_auth.urls'), name='auth'),
     path('store/api/', include('store.urls')),
     path('core/api/', include('core.urls')),
-    path('auth/', include('dj_rest_auth.urls'), name='auth'),
     path('rest-auth/registration/', include('dj_rest_auth.registration.urls')),
     path('schema/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('accounts/', include('allauth.urls')),

@@ -54,6 +54,21 @@ class RatingSerializer(serializers.ModelSerializer):
         model = Rating
         fields = ['rate1','rate2','rate3','rate4','rate5']
 
+
+class Sub_CategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Sub_Category
+        fields = '__all__'
+        depth = 1
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    # sub_category = Sub_CategorySerializer(many=True, read_only=True)
+    class Meta:
+        model = Category
+        fields = ['title','image','sub_category']
+        depth = 1
 class ProductSerializer(serializers.ModelSerializer):
     vendor = serializers.StringRelatedField(many=False,read_only=True)
     # images = serializers.HyperlinkedIdentityField(many=False, view_name='products-crud-detail', read_only=True)
@@ -67,6 +82,7 @@ class ProductSerializer(serializers.ModelSerializer):
     #                             # lookup_field='id'
     #                             )
     reviews = serializers.SerializerMethodField(read_only=True)
+    bookmarked = serializers.SerializerMethodField(read_only=True)
     images = ImageSerializer(many=False)
 
     # def to_representation(self, instance):
@@ -90,6 +106,26 @@ class ProductSerializer(serializers.ModelSerializer):
                 return
         except:
             return
+
+    def get_bookmarked(self,obj):
+        try:
+            user = self.context.get('request').user
+            is_authenticated = user.is_authenticated
+            if is_authenticated:
+                # print(obj.bookmarked_set.filter(user=user))
+                if obj.bookmarked_set.filter(user=user):
+                    print('True')
+                    return True
+                else:
+                    print('False')
+                    return False
+            else:
+                return False
+        except AttributeError:
+            return False
+
+        # print('/'*10,obj,'*'*10)
+        
     class Meta:
         """
         title = models.CharField(max_length=50)
@@ -100,7 +136,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
         """
         model = Product
-        fields =  ['pk','title','price','discount_price','discount_percent','vendor','rate','images','reviews','category','sub_category']
+        fields =  ['pk','title','price','discount_price','discount_percent','vendor','rate','images','reviews','category','sub_category','bookmarked']
         depth = 1
 
     def create(self, validated_data):

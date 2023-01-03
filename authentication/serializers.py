@@ -1,6 +1,7 @@
 from email.headerregistry import Address
 from rest_framework import serializers
 from .models import User
+from .utills import send_mail, send_msg
 from rest_framework.authtoken.models import Token
 from rest_auth.registration.serializers import RegisterSerializer
 from store.serializers import VendorSerializer
@@ -135,15 +136,22 @@ class UserRegSerializer(
         
         # adapter.clean_password(self.cleaned_data['password'], user=user)
         user.set_password(self.cleaned_data['password'])
-
+    
         print(user,adapter,'=====',self.cleaned_data)
         user.save()
-        self.custom_signup(request, user)
-        setup_user_email(request, user, [])
+        # send_mail(user, '12892')
+        # self.custom_signup(request, user)
+        # setup_user_email(request, user, [])
         return user  
   
-def user_email(user, email):
-    print(user,email)
+
+
+
+
+
+
+# def user_email(user, email):
+#     print(user,email)
     # username = serializers.CharField(
     #     max_length=get_username_max_length(),
     #     min_length=allauth_settings.USERNAME_MIN_LENGTH,

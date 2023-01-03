@@ -32,7 +32,7 @@ class OrderCRUD(viewsets.GenericViewSet):
     permission_classes = [permissions.IsAuthenticated, UserOrderCrudPermission]
     def list(self, request):
         # print(request.user)
-        queryset = Order.objects.filter(user=request.user, ordered=False)
+        queryset = Order.objects.filter(user=request.user, order_place=False)
         client = get_object_or_404(queryset)
         serializer = OrderSerializer(client)
         return Response(serializer.data)
@@ -134,7 +134,7 @@ class PaymentCRUD(viewsets.ModelViewSet):
         data = self.request.data
         # amount = int(data['amount'])
         print(data)
-        order = Order.objects.get(ref_code=data['ref_id'], ordered=False)
+        order = Order.objects.get(ref_code=data['ref_id'], order_place=False)
         print(order.total)
         total = int(order.total)*100
         # print(order.products, dir(order.products))
@@ -168,7 +168,7 @@ class PaymentCRUD(viewsets.ModelViewSet):
                             ref_id=reference,
                             amount=total,
                             option=data['option'])
-            order.ordered = True
+            order.order_place = True
             for item in order.products.all():
                 item.ordered=True
                 item.save()
@@ -177,6 +177,7 @@ class PaymentCRUD(viewsets.ModelViewSet):
         # elif response['ref_id']==
         else:
             # instance = Payment.objects.get(ref_id=self.request.data['reference'])
+            print(response)
             return Response(response)
 
 
@@ -188,8 +189,8 @@ def OrderedItemCreate(request, item_pk):
     ordereditem = OrderItem.objects.get_or_create(product=item,user=request.user,ordered=False)
     ordereditem[0].quantity += 1
     ordereditem[0].save()
-    order = Order.objects.get_or_create(user=request.user, ordered=False)
-    print(dir(order[0]))
+    order = Order.objects.get_or_create(user=request.user, order_place=False)
+    # print(dir(order[0]))
     order[0].ref_code = create_ref_code()
     order[0].products.add(ordereditem[0])
     order[0].save()
@@ -207,3 +208,4 @@ def PaymentVerify(request, payment_ref):
         instance.save()
 
     return Response(response)
+

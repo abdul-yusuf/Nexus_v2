@@ -55,16 +55,24 @@ class Order(models.Model):
     products = models.ManyToManyField(OrderItem)
     products.limit_choices_to=user_filter
     start_date = models.DateTimeField(auto_now_add=True)
-    ordered_date = models.DateTimeField(null=True, blank=True)
-    ordered = models.BooleanField(default=False)
     payment = models.OneToOneField(
         'Payment', on_delete=models.SET_NULL, blank=True, null=True)
     coupon = models.ForeignKey(
         'store.Coupon', on_delete=models.SET_NULL, blank=True, null=True)
+    #order related booleans
+    ordered_date = models.DateTimeField(null=True, blank=True)
+    order_place = models.BooleanField(default=False)
+    order_confirmed = models.BooleanField(default=False)
+    ready_for_delivery = models.BooleanField(default=False)
     being_delivered = models.BooleanField(default=False)
-    received = models.BooleanField(default=False)
+    delivered = models.BooleanField(default=False)
     refund_requested = models.BooleanField(default=False)
     refund_granted = models.BooleanField(default=False)
+    # address = 
+
+    @property
+    def address(self):
+        return self.user.address_set.values()
     
 
 
