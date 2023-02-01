@@ -122,15 +122,15 @@ class PaymentCRUD(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         try:
-            serializer = Payment.objects.filter(user=request.user, ref_id=request.data['ref_id'], is_payed=False)
+            serializer = Payment.objects.get(user=request.user, ref_id=request.data['ref_id'], is_payed=False)
             serializer = self.serializer_class(serializer)
-            print(serializer.data)
+            print(serializer.data, request.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:
-            print(e)
+            print('1. ',e)
+            request.data['user'] = request.user.id
             serializer = self.serializer_class(data=request.data)
             serializer.is_valid(raise_exception=True)
-            print(serializer.data)
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -149,11 +149,15 @@ class PaymentCRUD(viewsets.ModelViewSet):
 
         # try:
         if data['option']=='O':
-            response = Transaction.initialize(reference=data['ref_id'],
+            try:
+                response = Transaction.initialize(reference=data['ref_id'],
                                     # authorization_code='authorization_code',
                                     email=email,
                                     amount=total,
                                     channels=['card', 'ussd'])
+            except (ConnectionError, Exception) as e:
+                print(e)
+                return Response(status=status.HTTP_409_CONFLICT)
         else:
             response = {
                 'status': True,
@@ -171,6 +175,7 @@ class PaymentCRUD(viewsets.ModelViewSet):
             access_code = response['data']['access_code']
             reference = response['data']['reference']
             # return Response(response)
+            # if authorization_url=='':
             instance = serializer.save(user=self.request.user,
                             authorization=authorization_url,
                             ref_id=reference,
