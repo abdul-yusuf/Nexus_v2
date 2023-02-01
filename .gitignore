@@ -162,5 +162,5 @@ cython_debug/
 
 nexus_env/
 *.pyc
-db.sqlite3
+.sqlite3
 staticfiles/

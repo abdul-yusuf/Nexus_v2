@@ -37,6 +37,10 @@ schema_view = get_schema_view(
    authentication_classes=()
 )
 
+from django.shortcuts import render
+
+def landing_page(request):
+    return render(request, 'landing/landing_page.html')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -45,6 +49,7 @@ urlpatterns = [
     path("password-reset/confirm/<uidb64>/<token>/",
        PasswordResetConfirmView.as_view(),
        name='password_reset_confirm'),
+    path('', landing_page),
     path('auth/', include('authentication.urls')),
     path('auth/', include('dj_rest_auth.urls'), name='auth'),
     path('store/api/', include('store.urls')),

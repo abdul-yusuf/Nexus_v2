@@ -121,11 +121,19 @@ class PaymentCRUD(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticated, UserOrderCrudPermission]
 
     def create(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        try:
+            serializer = Payment.objects.filter(user=request.user, ref_id=request.data['ref_id'], is_payed=False)
+            serializer = self.serializer_class(serializer)
+            print(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print(e)
+            serializer = self.serializer_class(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            print(serializer.data)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
 
     def perform_create(self, serializer):
@@ -194,7 +202,7 @@ def OrderedItemCreate(request, item_pk):
     order[0].ref_code = create_ref_code()
     order[0].products.add(ordereditem[0])
     order[0].save()
-    return Response(OrderSerializer(order[0]).data)
+    return Response(OrderItemSerializer(ordereditem[0]).data)
 
 @api_view(['POST'])
 def PaymentVerify(request, payment_ref):
