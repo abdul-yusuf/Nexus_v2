@@ -6,11 +6,13 @@ from .serializers import CategorySerializer, ImageSerializer, ProductSerializer,
 from .models import Category, Images, Product, Rating, Review, Sub_Category
 from django.shortcuts import render, get_object_or_404
 from drf_yasg.utils import swagger_auto_schema 
-from rest_framework import status
+from rest_framework import status, filters
 from custom_permissions import VendorCrudPermission
 # Create your views here.
 
 class ProductCRUD(viewsets.ModelViewSet):
+    search_fields = ['title','description','category__title','sub_category__title']
+    filter_backends = (filters.SearchFilter,)
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,VendorCrudPermission]
@@ -36,10 +38,6 @@ class ProductCRUD(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        if self.request.user.is_authenticated:
-            print('True')
-        else:
-            print('False')
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
@@ -115,6 +113,14 @@ class CategoriesCRUD(viewsets.GenericViewSet):
     serializer_class = CategorySerializer
     
     def list(self, request, *args, **kwargs):
+        """_summary_
+        
+        Args:
+            request (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         # queryset = Category.objects.all()
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)

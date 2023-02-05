@@ -136,7 +136,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
         """
         model = Product
-        fields =  ['pk','title','price','discount_price','discount_percent','vendor','rate','images','reviews','category','sub_category','bookmarked']
+        fields =  ['pk','title','price','description','discount_price','discount_percent','vendor','rate','images','reviews','category','sub_category','bookmarked']
         depth = 1
 
     def create(self, validated_data):

@@ -121,6 +121,24 @@ class Payment(models.Model):
     def __str__(self):
         return self.user.email
 
+    def check_payment_status(self):
+
+        from paystackapi.paystack import Paystack
+        from paystackapi.transaction import Transaction
+        try:
+            response = Transaction.verify(reference=self.ref_id)
+        except (TimeoutError, ConnectionError) as e:
+            print(e)
+        print(response)
+        
+        if response['status']==True:
+            # instance = Payment.objects.get(ref_id=self.ref_id)
+            self.is_payed = True
+            self.save()
+            return True
+        else:
+            return
+
 class Address(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)

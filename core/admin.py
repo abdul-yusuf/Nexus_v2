@@ -15,6 +15,14 @@ class PaymentAdmin(admin.ModelAdmin):
     inlines = [
             PaymentInline
         ]
+    actions = [
+        'verify_payment'
+    ]
+
+    def verify_payment(self, request, querset):
+        for obj in querset:
+            obj.check_payment_status()
+
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('ref_code','id','user','ordered_date','payment','order_place','order_confirmed','ready_for_delivery','being_delivered','delivered','refund_requested')
     list_filter = ('order_place','order_confirmed','ready_for_delivery','being_delivered','delivered','refund_requested')
