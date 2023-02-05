@@ -12,7 +12,7 @@ from custom_permissions import VendorCrudPermission
 
 class ProductCRUD(viewsets.ModelViewSet):
     search_fields = ['title','description','category__title','sub_category__title']
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (filters.SearchFilter,)#filter
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,VendorCrudPermission]
