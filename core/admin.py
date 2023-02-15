@@ -3,6 +3,10 @@ from .models import *
 # from 
 # Register your models here.
 
+# class MyAdminSite(admin.AdminSite):
+#     site_header = 'Nexus administration'
+# admin_site = MyAdminSite(name='Nexus')
+
 class PaymentInline(admin.StackedInline):
     model = Order
 

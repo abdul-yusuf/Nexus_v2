@@ -50,13 +50,15 @@ class Order(models.Model):
     user = models.ForeignKey('authentication.User',
                              on_delete=models.CASCADE,
                              )
-    def user_filter(self):
-        return print(dir(self.user))
-    products = models.ManyToManyField(OrderItem)
-    products.limit_choices_to=user_filter
+    products = models.ManyToManyField(OrderItem, 
+                                    limit_choices_to={'user':user.primary_key}
+                                    )
     start_date = models.DateTimeField(auto_now_add=True)
-    payment = models.OneToOneField(
-        'Payment', on_delete=models.SET_NULL, blank=True, null=True)
+    payment = models.OneToOneField('Payment', 
+                                    on_delete=models.SET_NULL, 
+                                    blank=True, 
+                                    null=True
+                                    )
     coupon = models.ForeignKey(
         'store.Coupon', on_delete=models.SET_NULL, blank=True, null=True)
     #order related booleans
@@ -87,6 +89,8 @@ class Order(models.Model):
         if self.coupon:
             total -= self.coupon.amount
         return round(total,2)
+    
+    # def on_delivered(self):
     # @property
     # def address(self):
     #     # return 

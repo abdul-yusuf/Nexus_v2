@@ -36,6 +36,17 @@ class OrderCRUD(viewsets.GenericViewSet):
         client = get_object_or_404(queryset)
         serializer = OrderSerializer(client)
         return Response(serializer.data)
+    
+    def retrieve(self, request, *args, **kwargs):
+        print(request)
+        print(args)
+        print(kwargs)
+        queryset = Order.objects.filter(user=request.user, order_place=True)
+        # client = get_object_or_404(queryset)
+        print(queryset)
+        # print(client)
+        serializer = OrderSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 class OrderItemCRUD(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
@@ -167,7 +178,7 @@ class PaymentCRUD(viewsets.ModelViewSet):
                     'reference': data['ref_id']
                 }
             }
-        
+         
         print(response)
         
         if response['status']==True:

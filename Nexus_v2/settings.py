@@ -35,7 +35,7 @@ if env('LIVE')==1:
     print("DEBUG = False")
 else:
     DEBUG = True
-    print("DEBUG = True")
+    print("DEBUG = True", env('LIVE'))
 
 
 ALLOWED_HOSTS = ['*']
@@ -46,6 +46,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     'django.contrib.sites',
+    
     #  'account',
     'django.contrib.admin',
     'django.contrib.auth',
