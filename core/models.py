@@ -51,7 +51,8 @@ class Order(models.Model):
                              on_delete=models.CASCADE,
                              )
     products = models.ManyToManyField(OrderItem, 
-                                    limit_choices_to={'user':user.primary_key}
+                                    # limit_choices_to={'user_id':user.primary_key},
+                                    # blank=True
                                     )
     start_date = models.DateTimeField(auto_now_add=True)
     payment = models.OneToOneField('Payment', 
